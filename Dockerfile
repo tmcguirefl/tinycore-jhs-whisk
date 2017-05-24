@@ -17,6 +17,10 @@ RUN cd /home \
     && tar -xf j805_linux64.tar.gz \
     && rm -rf j805_linux64.tar.gz
 
+RUN cd /home/j64-805 \
+    && mkdir temp
+    && cd temp
+    && wget https://raw.githubusercontent.com/tmcguirefl/tinycore-jhs-whisk/master/main.ijs
 
 ENV CONFIG="BIND=:''localhost''"
 ENV RUN=""
