@@ -21,7 +21,7 @@ for_i. 'api_key';'namespace';'action_name';'activation_id';'deadline' do.
     NB. ignore error as data may be incompletely specified.
   end.
 end.
-}."1 env
+env=. }."1 env
 
 jsoninp =: ; 'value' gethash_json decy
 
