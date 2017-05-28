@@ -1,6 +1,10 @@
 NB. run.ijs - run application 
 require 'convert/json'
-coclass 'main'
+
+NB. the coclass is run, I believe this sets up a namespace for jev_post_raw so 
+NB. it is not confused with other http paths like the one for /init which uses
+NB. the same name for POST handling (i.e. jev_post_raw)
+coclass 'run'
 coinsert 'jhs'
 
 jev_post_raw=: 3 : 0
