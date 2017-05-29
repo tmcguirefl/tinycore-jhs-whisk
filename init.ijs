@@ -1,6 +1,7 @@
 NB. init.ijs - This is the init operation expected to be implemented
 NB.      by an HTTP server. In JHS OKURL needs to be set to '/init'
 require 'convert/json'
+require 'convert/misc' NB. this contains base64 translation
 
 coclass 'init'
 coinsert 'jhs'
@@ -21,9 +22,13 @@ end.
 NB. decode JSON input y
 JSONinit =. dec_json y
 
-NB. extract code 
+NB. extract code from base64
+NB. in java this was streamed data I wonder what the representation in JHS is
+b64filedat =. 'b64' gethash_json JSONinit
+filetxt =. frombase64 b64filedat
 
 NB. save code to file
+filetxt fwrites jpath '~/temp/main.ijs'
 
 NB. load code into JHS
 
