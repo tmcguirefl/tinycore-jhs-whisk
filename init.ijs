@@ -31,6 +31,7 @@ NB. save code to file
 filetxt fwrites jpath '~/temp/main.ijs'
 
 NB. load code into JHS
+load jpath '~/temp/main.ijs'
 
 NB. return 200 OK response
 
