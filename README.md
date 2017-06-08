@@ -1,15 +1,10 @@
+Added on to joebo/tinycore-jhs to set up a whisk environment
+
 docker image for j64-805 jhs and tinycore with main file added for openwhisk handling
 see: https://hub.docker.com/r/joebo/tinycore-jhs/
 
-To add a file into the docker image you can use the docker RUN command with wget
-In this repository there is a file main.ijs. this needs to be placed in the 
-J software code directory.
+COPY commands added into the Docker file to pull in init.ijs and run.ijs into the image
 
-By using the following RUN cmd you can download a file from github directly 
-into a docker image
+By pulling down the git directory you can create an image running JSoftware JHS and by using 
+the following docker run command can set the image up to work with whisk to run microapps in J
 
-RUN wget https://raw.githubusercontent.com/tmcguirefl/tinycore-jhs-whisk/master/main.ijs
-
-The file would need to be placed somewhere in the J software distribution. I recommend 
-creating a temp directory under the /home/j64-805 directory and placing the file there.
-see the Dockerfile for the complete command
