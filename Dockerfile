@@ -23,7 +23,7 @@ USER root
 
 RUN mkdir /lib64 \
     && ln -s /lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 \
-    && ln -s /usr/local/lib/libncurses.so.5 /lib/libtinfo.so.5
+    && ln -s /usr/local/lib/libncurses.so.5 /lib/libtinfo.so.5 \
     && cd /home \
     && wget http://www.jsoftware.com/download/j805/install/j805_linux64.tar.gz \
     && tar -xf j805_linux64.tar.gz \
