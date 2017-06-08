@@ -28,10 +28,10 @@ b64filedat =. 'b64' gethash_json JSONinit
 filetxt =. frombase64 b64filedat
 
 NB. save code to file
-filetxt fwrites jpath '~/temp/main.ijs'
+filetxt fwrites jpath '~temp/main.ijs'
 
 NB. load code into JHS
-load jpath '~/temp/main.ijs'
+load jpath '~temp/main.ijs'
 
 NB. return 200 OK response
 z =. '{ "result" : { "value" : "success" }}'
