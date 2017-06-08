@@ -50,6 +50,6 @@ ENV RUN=""
 
 # example command line for tinycore-jhs-whisk implementation with a main.ijs pulled from GitHub
 # docker run -p 65001:65001 -e CONFIG="BIND=:''any'' [ USER=:''whisk'' [ PASS=:''whiskadmin'' [ OKURL=:''main''" -e RUN="load '~temp/main.ijs'" tinycore-jhs:latest
-# docker run -p 8080:8080 -e CONFIG="BIND=:''any'' [ USER=:''whisk'' [ PASS=:''whiskadmin'' [ OKURL=:''init'' " -e RUN="load '~temp/main.ijs'" tinycore-jhs:latest
+# docker run -p 8080:8080 -e CONFIG="BIND=:''any'' [ USER=:''whisk'' [ PASS=:''whiskadmin'' [ OKURL=:''init'';''run'' " -e RUN="load '~addons/whisk/init.ijs' [ load '~addons/whisk/run.ijs'" tinycore-jhs:latest
 
 ENTRYPOINT /home/j64-805/bin/jconsole -js "config_jhs_ =: 3 : '$CONFIG'" -js "$RUN" -js "load'~addons/ide/jhs/core.ijs'" "init_jhs_''"
