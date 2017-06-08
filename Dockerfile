@@ -27,7 +27,9 @@ RUN mkdir /lib64 \
     && cd /home \
     && wget http://www.jsoftware.com/download/j805/install/j805_linux64.tar.gz \
     && tar -xf j805_linux64.tar.gz \
-    && rm -rf j805_linux64.tar.gz
+    && rm -rf j805_linux64.tar.gz \
+    && mkdir /home/j64-805/addons/whisk
+# Added a whisk directory to addons so that the whisk webapps can be stored their
 
 # the temp directory for j64-805 under tiny core ends up being /tmp so this is where
 # the wget of the main application should take place.
