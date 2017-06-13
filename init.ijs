@@ -2,7 +2,7 @@ NB. init.ijs - This is the init operation expected to be implemented
 NB.      by an HTTP server. In JHS OKURL needs to be set to '/init'
 load '~addons/convert/json/json.ijs'
 load '~addons/convert/misc/base64.ijs' NB. this contains base64 translation
-
+NB.require 'data/jfiles'
 coclass 'init'
 coinsert 'jhs'
 
@@ -54,6 +54,13 @@ end.
 
 NB. save code to file
 filetxt fwrites '~temp/main.ijs'
+
+NB. Load file into jhs namespace
+curspace =. 18!:5''
+18!:4 <'jhs'
+0!:0 <jpath '~temp/main.ijs'
+18!:4 curspace
+
 
 NB. return 200 OK response
 z =. '{ "result" : { "value" : "success" }}'
