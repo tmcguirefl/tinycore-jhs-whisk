@@ -4,10 +4,11 @@ FROM tatsushid/tinycore:7.2-x86_64
 USER tc
 
 RUN tce-load -wic \
-        ncurses
-
-#RUN tce-load -wic \
-#        openssl-dev
+        ncurses \
+#        openssl-dev \    # needed for full wget to use https
+        wget
+# full wget is needed for J to use pacman to obtain addons at runtime.
+# tinycore comes with busybox wget but it only supports a subset of option flags
 
 # tiny core uses wget which is part of busybox.
 # busybox wget does not have support for openssl therefore
@@ -15,12 +16,21 @@ RUN tce-load -wic \
 # which requires https for the transfer.
 # By tce-loading wget this functionality will be built into the
 # image.
-#RUN tce-load -wic \
-#        wget
 
 # Instructions after here are run with 'root' user
 USER root
 
+# copy in any addons so they are available for commands in the following
+# run command. After the run command the addons will be available just
+# as if the package manager had been used within J. This way there
+# doesn't need to be any additions made to the J profile file or
+# the config file.
+COPY ./convert_json_1.0.9_linux.tar.gz /home/
+COPY ./convert_misc_1.3.5_linux.tar.gz /home/
+
+# Every RUN command in a docker file adds an image layer. This makes
+# debugging a docker image difficult so glom all the run commands
+# for the J distribution here in this run command
 RUN mkdir /lib64 \
     && ln -s /lib/ld-linux-x86-64.so.2 /lib64/ld-linux-x86-64.so.2 \
     && ln -s /usr/local/lib/libncurses.so.5 /lib/libtinfo.so.5 \
@@ -28,17 +38,18 @@ RUN mkdir /lib64 \
     && wget http://www.jsoftware.com/download/j805/install/j805_linux64.tar.gz \
     && tar -xf j805_linux64.tar.gz \
     && rm -rf j805_linux64.tar.gz \
-    && mkdir /home/j64-805/addons/whisk
+    && cd /home/j64-805/addons \
+    && tar -xf /home/convert_json_1.0.9_linux.tar.gz \
+    && rm -rf /home/convert_json_1.0.9_linux.tar.gz \
+    && tar -xf /home/convert_misc_1.3.5_linux.tar.gz \
+    && rm -rf /home/convert_misc_1.3.5_linux.tar.gz \
+    && mkdir /home/j64-805/addons/web \
+    && mkdir /home/j64-805/addons/web/whisk
 # Added a whisk directory to addons so that the whisk webapps can be stored their
 
-# the temp directory for j64-805 under tiny core ends up being /tmp so this is where
-# the wget of the main application should take place.
-#RUN cd /tmp \
-#    && wget https://raw.githubusercontent.com/tmcguirefl/tinycore-jhs-whisk/master/main.ijs
-
 # copy the local init.ijs and run.ijs required by the OpenWhisk protocol
-COPY ./init.ijs /home/j64-805/addons/whisk/
-COPY ./run.ijs /home/j64-805/addons/whisk/
+COPY ./init.ijs /home/j64-805/addons/web/whisk/
+COPY ./run.ijs /home/j64-805/addons/web/whisk/
 
 
 ENV CONFIG="BIND=:''localhost''"
@@ -48,8 +59,5 @@ ENV RUN=""
 # docker run -p 65001:65001 -e CONFIG="BIND=:''any'' [ USER=:''joe'' [ PASS=:''test''" tinycore-jhs:latest
 # docker run -p 65001:65001 -e CONFIG="BIND=:''any'' [ USER=:''joe'' [ PASS=:''test'' [ OKURL=:''jdemo1''" -e RUN="load '~addons/ide/jhs/demo/jdemo1.ijs'" tinycore-jhs:latest
 
-# example command line for tinycore-jhs-whisk implementation with a main.ijs pulled from GitHub
+# example command line for tinycore-jhs-whisk implementation
 # docker run -p 65001:65001 -e CONFIG="BIND=:''any'' [ USER=:''whisk'' [ PASS=:''whiskadmin'' [ OKURL=:''main''" -e RUN="load '~temp/main.ijs'" tinycore-jhs:latest
-# docker run -p 8080:8080 -e CONFIG="BIND=:''any'' [ USER=:''whisk'' [ PASS=:''whiskadmin'' [ OKURL=:''init'';''run'' " -e RUN="load '~addons/whisk/init.ijs' [ load '~addons/whisk/run.ijs'" tinycore-jhs:latest
-
-ENTRYPOINT /home/j64-805/bin/jconsole -js "config_jhs_ =: 3 : '$CONFIG'" -js "$RUN" -js "load'~addons/ide/jhs/core.ijs'" "init_jhs_''"
